@@ -1,0 +1,162 @@
+{
+  "meta": { "title": "OCM — Made to Stand Out" },
+  "common": {
+    "startProject": "Start a project",
+    "letsTalk": "Let’s talk",
+    "menu": "Menu +",
+    "close": "Close −",
+    "closeDialog": "Close dialog",
+    "backToTop": "Back to top ↑",
+    "language": "العربية"
+  },
+  "nav": {
+    "home": "OCM home",
+    "main": "Main navigation",
+    "work": "Our work",
+    "studio": "The studio",
+    "services": "What we do"
+  },
+  "hero": {
+    "eyebrow": "Independent creative & media studio",
+    "kicker": "Big ideas. Every frame.",
+    "title1": "Bold ideas.",
+    "title2": "Powerful",
+    "title3": "stories.",
+    "description": "We bring brands into focus. Through film, photography, and design, we turn your vision into something unforgettable.",
+    "explore": "Explore our work",
+    "perspectives": "Different perspectives. One vision.",
+    "scroll": "Scroll to discover",
+    "discover": "Discover our work",
+    "stamp1": "Strategy.",
+    "stamp2": "Story.",
+    "stamp3": "Craft."
+  },
+  "ticker": {
+    "label": "Creative strategy, bold storytelling, meaningful impact",
+    "strategy": "Creative strategy",
+    "storytelling": "Bold storytelling",
+    "impact": "Meaningful impact"
+  },
+  "filters": {
+    "all": "All work",
+    "brandFilms": "Brand films",
+    "photography": "Photography",
+    "brandIdentity": "Brand identity"
+  },
+  "work": {
+    "eyebrow": "01 / Selected work",
+    "headline1": "Stories that make",
+    "headline2": "people look twice.",
+    "description": "Brand worlds, moving images and campaigns shaped with a clear idea and a strong visual point of view.",
+    "filterLabel": "Filter projects",
+    "viewProject": "View {title} project",
+    "previous": "Previous projects",
+    "next": "Next projects"
+  },
+  "capabilities": {
+    "idea": {
+      "title": "Idea-led creative",
+      "copy": "Sharp strategy and original concepts give every project a clear reason to exist."
+    },
+    "studio": {
+      "title": "One connected studio",
+      "copy": "Direction, film, photography and design stay aligned from the first sketch to delivery."
+    },
+    "screens": {
+      "title": "Built for every screen",
+      "copy": "Each story is crafted to feel distinctive across campaigns, websites and social channels."
+    }
+  },
+  "projects": {
+    "nomad": {
+      "title": "Beyond the ordinary.",
+      "type": "Campaign concept",
+      "description": "An exploration of the places that make us feel small—and the possibilities that make us dream big. A cinematic campaign concept for an outdoor lifestyle brand.",
+      "services": "Creative direction · Film treatment · Campaign strategy"
+    },
+    "form": {
+      "title": "A different kind of energy.",
+      "type": "Editorial concept",
+      "description": "Expressive movement, unexpected angles, and a little attitude. An editorial photography concept celebrating individuality through contemporary fashion.",
+      "services": "Art direction · Photography · Editorial design"
+    },
+    "earthen": {
+      "title": "Rooted in something real.",
+      "type": "Identity concept",
+      "description": "A quieter kind of statement. A brand identity concept for considered spaces, built around natural textures, warm neutrals, and the beauty of everyday rituals.",
+      "services": "Brand strategy · Visual identity · Art direction"
+    }
+  },
+  "about": {
+    "eyebrow": "02 / The studio",
+    "headline1": "Small ego.",
+    "headline2": "Big ideas.",
+    "headline3": "Real impact.",
+    "intro": "We’re OCM. A creative media studio at the intersection of strategy, storytelling, and craft.",
+    "copy": "We bring curious minds and different perspectives together to make work that connects. From a brand’s first hello to its next big moment, we make every detail count.",
+    "link": "Meet your next creative partner"
+  },
+  "services": {
+    "eyebrow": "03 / What we do",
+    "headline1": "From the idea.",
+    "headline2": "To the",
+    "headline3": "impact.",
+    "intro1": "One studio. A whole world of possibilities.",
+    "intro2": "We connect the dots from start to finish.",
+    "button": "Build something with us",
+    "strategy": {
+      "title": "Strategy & storytelling",
+      "text": "We find what makes you different, then give people a reason to care.",
+      "tags": "Brand strategy / Creative concepts / Campaign planning"
+    },
+    "film": {
+      "title": "Film & production",
+      "text": "From the first spark to the final frame. Stories you can feel.",
+      "tags": "Brand films / Commercials / Video production"
+    },
+    "branding": {
+      "title": "Branding & design",
+      "text": "Distinctive identities that look the part and mean something.",
+      "tags": "Visual identity / Art direction / Digital design"
+    },
+    "content": {
+      "title": "Content & social",
+      "text": "Made for the feed. Built to start a conversation.",
+      "tags": "Social campaigns / Photography / Content creation"
+    }
+  },
+  "cta": {
+    "eyebrow": "Good things start with a conversation",
+    "line1": "Have a big idea?",
+    "line2": "Let’s make it",
+    "line3": "real.",
+    "copy": "Your next chapter starts here."
+  },
+  "dialog": {
+    "projectCta": "Have a project in mind?",
+    "eyebrow": "Let’s make something matter",
+    "title1": "Big ideas",
+    "title2": "start here.",
+    "intro": "Tell us a little about yours. Create a project brief you can save and share with your team.",
+    "name": "Your name",
+    "namePlaceholder": "Alex Morgan",
+    "email": "Email address",
+    "emailPlaceholder": "alex{'@'}company.com",
+    "service": "What do you have in mind?",
+    "message": "A little about your project",
+    "messagePlaceholder": "The idea, the ambition, the what-if…",
+    "download": "Download project brief",
+    "privacy": "Your brief is saved to your device. No information is submitted.",
+    "ready": "Your project brief is ready. Check your downloads.",
+    "allServices": "A bit of everything",
+    "projectVisual": "{client} project visual"
+  },
+  "brief": {
+    "title": "OCM — PROJECT BRIEF",
+    "name": "Name",
+    "email": "Email",
+    "service": "Service",
+    "idea": "Project idea"
+  },
+  "footer": { "tagline": "Independent minds. Extraordinary stories." }
+}
