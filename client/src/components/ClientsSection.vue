@@ -1,9 +1,13 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
-import { portfolioImage, usePortfolio } from '../composables/usePortfolio'
+import { onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { portfolioImage, usePortfolioStore } from '../stores/portfolio'
 
 const { locale, t } = useI18n()
-const { companies } = usePortfolio()
+const portfolio = usePortfolioStore()
+const { companies } = storeToRefs(portfolio)
+onMounted(() => portfolio.load())
 </script>
 
 <template>

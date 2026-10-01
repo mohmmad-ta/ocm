@@ -1,17 +1,21 @@
 <script setup>
-import { computed, watchEffect } from 'vue'
+import { computed, onMounted, watchEffect } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import Footer from '../components/Footer.vue'
 import Navbar from '../components/Navbar.vue'
 import DataState from '../components/DataState.vue'
-import { portfolioImage, usePortfolio } from '../composables/usePortfolio'
+import { portfolioImage, usePortfolioStore } from '../stores/portfolio'
 
 const route = useRoute()
 const router = useRouter()
 const { locale, t } = useI18n()
-const { loading, error, reload, projects, getCompany } = usePortfolio()
+const portfolio = usePortfolioStore()
+const { loading, error, projects } = storeToRefs(portfolio)
+const { reload, getCompany } = portfolio
 const company = computed(() => getCompany(route.params.companySlug))
+onMounted(() => portfolio.load())
 
 function goToContact() {
   router.push({ name: 'home', hash: '#contact', query: { lang: locale.value } })

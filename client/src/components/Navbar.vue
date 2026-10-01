@@ -1,5 +1,6 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { Globe, Menu, X } from '@lucide/vue'
 
 const menuOpen = defineModel('menuOpen', { type: Boolean, default: false })
 const { locale, t } = useI18n()
@@ -28,31 +29,31 @@ function toggleLocale() {
 <template>
   <header class="fixed inset-x-0 top-0 z-50 border-b border-white/[0.06] bg-canvas/20 backdrop-blur-xl">
     <div class="mx-auto flex h-[85px] max-w-[1800px] items-center justify-between px-[5%] sm:h-[108px] sm:px-[4.2%]">
-      <RouterLink dir="ltr" class="relative pr-[18px] font-display text-[43px] font-extrabold leading-none tracking-[-4px] sm:text-[53px] sm:tracking-[-5px]" :to="{ name: 'home', query: { lang: locale } }" :aria-label="t('nav.home')">
-        ocm<span class="absolute right-0 top-1 font-sans text-sm tracking-normal">®</span>
+      <RouterLink dir="ltr" class="relative items-center flex pr-[18px] font-display text-[43px] font-extrabold leading-none tracking-[-4px] sm:text-[53px] sm:tracking-[-5px]" :to="{ name: 'home', query: { lang: locale } }" :aria-label="t('nav.home')">
+        <img src="/logo1.png" class="w-36 h-36" alt=" ">ocm
       </RouterLink>
 
-      <nav class="hidden gap-[37px] text-[13px] sm:flex [&_a]:transition-colors [&_a]:duration-200 [&_a:hover]:text-main [&_span]:ml-[3px] [&_span]:align-super [&_span]:text-[9px] [&_span]:text-main" :aria-label="t('nav.main')">
-        <RouterLink :to="{ name: 'home', hash: '#work', query: { lang: locale } }">{{ t('nav.work') }} <span>{{ String(projectCount).padStart(2, '0') }}</span></RouterLink>
+      <nav class="hidden gap-[37px] text-[16px] sm:flex [&_a]:transition-colors [&_a]:duration-200 [&_a:hover]:text-main [&_span]:ml-[3px] [&_span]:align-super [&_span]:text-[9px] [&_span]:text-main" :aria-label="t('nav.main')">
+        <RouterLink :to="{ name: 'home', hash: '#work', query: { lang: locale } }">{{ t('nav.work') }}</RouterLink>
         <RouterLink :to="{ name: 'home', hash: '#clients', query: { lang: locale } }">{{ t('nav.clients') }}</RouterLink>
         <RouterLink :to="{ name: 'home', hash: '#about', query: { lang: locale } }">{{ t('nav.studio') }}</RouterLink>
         <RouterLink :to="{ name: 'home', hash: '#services', query: { lang: locale } }">{{ t('nav.services') }}</RouterLink>
       </nav>
 
-      <div class="flex items-center gap-2.5">
-        <button type="button" class="rounded-full border border-white/15 bg-white/[0.04] px-3 py-2 text-[10px] font-semibold text-cream transition hover:border-main hover:text-main sm:px-4 sm:py-2.5" @click="toggleLocale">
-          {{ t('common.language') }}
-        </button>
-        <button class="inline-flex items-center justify-between gap-[35px] rounded-[5px] bg-main px-6 py-[17px] text-[13px] font-semibold text-[#181816] transition duration-200 hover:-translate-y-0.5 hover:bg-[#ff946c] [&_span]:text-[22px] [&_span]:leading-none !hidden !gap-[25px] !px-[17px] !py-[13px] lg:!inline-flex" @click="openContact">
-          {{ t('common.letsTalk') }} <span>↗</span>
+      <div class="flex items-center lg:min-w-52 justify-end gap-2.5">
+        <button type="button" :aria-label="t('common.language')" class="grid size-10 place-items-center rounded-full border border-white/15 bg-white/[0.04] text-cream transition hover:border-main hover:text-main" @click="toggleLocale">
+          <Globe :size="17" :stroke-width="2" aria-hidden="true" />
         </button>
         <button
-          class="block rounded border border-[#55554d] bg-transparent px-[15px] py-2.5 text-xs sm:hidden"
+          type="button"
+          class="grid size-11 place-items-center rounded border border-[#55554d] bg-transparent text-cream transition hover:border-main hover:text-main sm:hidden"
           :aria-expanded="menuOpen"
+          :aria-label="menuOpen ? t('nav.closeMenu') : t('nav.openMenu')"
           aria-controls="mobile-nav"
           @click="menuOpen = !menuOpen"
         >
-          {{ menuOpen ? t('common.close') : t('common.menu') }}
+          <X v-if="menuOpen" :size="20" :stroke-width="2" aria-hidden="true" />
+          <Menu v-else :size="20" :stroke-width="2" aria-hidden="true" />
         </button>
       </div>
     </div>

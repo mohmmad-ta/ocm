@@ -1,7 +1,7 @@
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { portfolioImage } from '../composables/usePortfolio'
+import { portfolioImage } from '../stores/portfolio'
 
 const { locale, t } = useI18n()
 

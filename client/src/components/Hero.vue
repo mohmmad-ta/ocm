@@ -1,12 +1,15 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
-import { usePortfolio, portfolioImage } from '../composables/usePortfolio'
+import { usePortfolioStore, portfolioImage } from '../stores/portfolio'
 import { mediaUrl } from '../../axios/axios'
 
 const { locale, t } = useI18n()
 
-const { hero, projects } = usePortfolio()
+const portfolio = usePortfolioStore()
+const { hero, projects } = storeToRefs(portfolio)
+onMounted(() => portfolio.load())
 const displayColumns = computed(() => {
   const images = [hero.value?.image, hero.value?.poster, ...projects.value.map(p => p.image)].filter(Boolean)
   if (!images.length && !hero.value?.video) return []

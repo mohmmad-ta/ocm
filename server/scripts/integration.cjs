@@ -108,8 +108,15 @@ async function run() {
         console.log(`Temporary preview: ${base}/admin/login?lang=en`);
         console.log(`Disposable credentials: dashboard-test / ${password}`);
         console.log(`${checks} API checks passed. Press Ctrl+C to remove the temporary database and media.`);
-        process.once('SIGINT', () => cleanup().then(() => process.exit(0)));
-        process.once('SIGTERM', () => cleanup().then(() => process.exit(0)));
+        let stopping = false;
+        const stopPreview = () => {
+            if (stopping) return;
+            stopping = true;
+            cleanup().then(() => process.exit(0)).catch(() => process.exit(1));
+        };
+        process.once('SIGINT', stopPreview);
+        process.once('SIGTERM', stopPreview);
+        process.once('SIGHUP', stopPreview);
         return;
     }
     await request(`/auth/admin/hero-video/${hero._id}`, { method: 'DELETE', status: 204 });

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuth } from '../composables/useAuth'
+import { useAuthStore } from '../stores/auth'
+import { pinia } from '../stores'
 import HomeView from '../views/HomeView.vue'
 import CompanyView from '../views/CompanyView.vue'
 import ProjectView from '../views/ProjectView.vue'
@@ -39,7 +40,7 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   if (to.matched.some(record => record.meta.requiresAdmin)) {
-    if (!(await useAuth().checkSession())) return { name: 'admin-login' }
+    if (!(await useAuthStore(pinia).checkSession())) return { name: 'admin-login' }
   }
 })
 

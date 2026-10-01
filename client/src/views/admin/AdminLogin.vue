@@ -2,15 +2,15 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useAuth } from '../../composables/useAuth'
+import { useAuthStore } from '../../stores/auth'
 import { apiError } from '../../../axios/axios'
 const { t, locale } = useI18n()
 const router = useRouter()
-const { login } = useAuth()
+const auth = useAuthStore()
 const userID = ref(''), password = ref(''), error = ref(''), busy = ref(false)
 async function submit() {
   busy.value = true; error.value = ''
-  try { await login({ userID: userID.value, password: password.value }); await router.replace('/admin') }
+  try { await auth.login({ userID: userID.value, password: password.value }); await router.replace('/admin') }
   catch (err) { error.value = apiError(err, t('admin.connectionError')) }
   finally { busy.value = false }
 }

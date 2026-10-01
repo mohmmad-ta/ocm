@@ -4,15 +4,29 @@ import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import api, { apiError, fetchAll, mediaUrl } from '../../../axios/axios'
 import { resources } from '../../admin/resources'
-import { invalidatePortfolio } from '../../composables/usePortfolio'
+import { usePortfolioStore } from '../../stores/portfolio'
 import MediaInput from '../../components/admin/MediaInput.vue'
 const route = useRoute()
+const portfolio = usePortfolioStore()
 const { t, locale } = useI18n()
 const kind = computed(() => route.params.resource)
 const config = computed(() => resources[kind.value])
 const rows = ref([]), options = ref({ companies: [], categories: [] })
 const search = ref(''), page = ref(1), loading = ref(false), error = ref(''), notice = ref('')
-const busy = ref(false), progress = ref(0), formError = ref(''), editing = ref(null), form = ref({}), files = ref({})
+function emptyForm() {
+  return {
+    active: true,
+    featured: false,
+    autoplay: true,
+    muted: true,
+    loop: true,
+    existingImages: [],
+    removeVideo: false,
+    removePoster: false,
+    removeImage: false,
+  }
+}
+const busy = ref(false), progress = ref(0), formError = ref(''), editing = ref(null), form = ref(emptyForm()), files = ref({})
 const editor = ref(null), confirmDialog = ref(null), deleting = ref(null), formKey = ref(0)
 const filtered = computed(() => rows.value.filter(item => `${item.name} ${item.company?.name || ''} ${item.category?.name || ''}`.toLowerCase().includes(search.value.toLowerCase())))
 const pages = computed(() => Math.max(1, Math.ceil(filtered.value.length / 10)))
@@ -34,13 +48,24 @@ async function load() {
   } catch (err) { if (id === requestId) error.value = apiError(err, t('admin.connectionError')) }
   finally { if (id === requestId) loading.value = false }
 }
-watch(kind, () => { editor.value?.close(); confirmDialog.value?.close(); rows.value = []; page.value = 1; search.value = ''; notice.value = ''; load() }, { immediate: true })
+watch(kind, () => {
+  editor.value?.close()
+  confirmDialog.value?.close()
+  rows.value = []
+  page.value = 1
+  search.value = ''
+  notice.value = ''
+  editing.value = null
+  form.value = emptyForm()
+  files.value = {}
+  load()
+}, { immediate: true })
 onBeforeRouteLeave(() => !busy.value)
 onBeforeRouteUpdate(() => !busy.value)
 function closeEditor() { if (!busy.value) editor.value.close() }
 async function openEditor(item = null) {
   editing.value = item; files.value = {}; formError.value = ''; progress.value = 0; formKey.value++
-  form.value = { active: true, featured: false, autoplay: true, muted: true, loop: true, ...item,
+  form.value = { ...emptyForm(), ...item,
     company: item?.company?._id || item?.company || '', category: item?.category?._id || item?.category || '',
     services: (item?.services || []).join(', '),
     existingImages: [...(item?.images?.length ? item.images : item?.image && kind.value === 'projects' ? [item.image] : [])],
@@ -63,9 +88,10 @@ async function save() {
     let body = payload
     if (currentConfig.multipart) {
       if (currentKind === 'projects') {
-        if (form.value.existingImages.length + (files.value.images?.length || 0) < 1) throw new Error(t('admin.imageRequired'))
-        if (form.value.existingImages.length + (files.value.images?.length || 0) > 8) throw new Error(t('admin.imageLimit'))
-        payload.existingImages = form.value.existingImages
+        const existingImages = form.value.existingImages ?? []
+        if (existingImages.length + (files.value.images?.length || 0) < 1) throw new Error(t('admin.imageRequired'))
+        if (existingImages.length + (files.value.images?.length || 0) > 8) throw new Error(t('admin.imageLimit'))
+        payload.existingImages = existingImages
         payload.removeVideo = !!form.value.removeVideo
       } else {
         if (!editing.value && !files.value.video?.length) throw new Error(t('admin.videoRequired'))
@@ -79,14 +105,14 @@ async function save() {
     await api.request({ url, method: editing.value ? 'patch' : 'post', data: body, timeout: 180000,
       onUploadProgress: event => { progress.value = Math.round((event.loaded / (event.total || event.loaded)) * 100) },
     })
-    invalidatePortfolio(); editor.value.close(); notice.value = t('admin.saved'); await load()
+    portfolio.invalidate(); editor.value.close(); notice.value = t('admin.saved'); await load()
   } catch (err) { formError.value = err.response ? apiError(err, t('admin.connectionError')) : err.message || t('admin.connectionError') }
   finally { busy.value = false }
 }
 async function askDelete(item) { deleting.value = item; formError.value = ''; await nextTick(); confirmDialog.value.showModal() }
 async function remove() {
   busy.value = true; formError.value = ''
-  try { await api.delete(`${config.value.endpoint}/${deleting.value._id}`); invalidatePortfolio(); confirmDialog.value.close(); notice.value = t('admin.deleted'); await load() }
+  try { await api.delete(`${config.value.endpoint}/${deleting.value._id}`); portfolio.invalidate(); confirmDialog.value.close(); notice.value = t('admin.deleted'); await load() }
   catch (err) { formError.value = apiError(err, t('admin.connectionError')) }
   finally { busy.value = false }
 }
@@ -114,7 +140,7 @@ function cancelDialog(event) { if (busy.value) event.preventDefault() }
             <span v-if="field.key === 'services'" class="mt-1 block text-xs text-muted">{{ t('admin.servicesHint') }}</span>
           </label></div>
           <p v-if="kind === 'projects' && (!options.companies.length || !options.categories.length)" class="text-sm text-main">{{ t('admin.dependencies') }}</p>
-          <div v-if="kind === 'projects' && form.existingImages.length" class="grid grid-cols-3 gap-3"><div v-for="image in form.existingImages" :key="image" class="relative"><img :src="mediaUrl(image)" alt="" class="aspect-square w-full rounded-lg object-cover" /><button type="button" :aria-label="t('admin.removeImage')" class="absolute end-1 top-1 rounded-full bg-black/80 px-2 text-xl" @click="form.existingImages = form.existingImages.filter(i => i !== image)">×</button></div></div>
+          <div v-if="kind === 'projects' && form.existingImages?.length" class="grid grid-cols-3 gap-3"><div v-for="image in form.existingImages" :key="image" class="relative"><img :src="mediaUrl(image)" alt="" class="aspect-square w-full rounded-lg object-cover" /><button type="button" :aria-label="t('admin.removeImage')" class="absolute end-1 top-1 rounded-full bg-black/80 px-2 text-xl" @click="form.existingImages = form.existingImages.filter(i => i !== image)">×</button></div></div>
           <template v-for="field in config.media" :key="field"><div v-if="editing?.[field] && field !== 'images'" class="space-y-2"><video v-if="field === 'video'" :src="mediaUrl(editing[field])" controls preload="metadata" class="max-h-48 rounded-lg" /><img v-else :src="mediaUrl(editing[field])" alt="" class="h-28 rounded-lg object-cover" /><label v-if="!(kind === 'hero' && field === 'video')" class="flex items-center gap-2 text-sm text-muted"><input v-model="form[`remove${field[0].toUpperCase()}${field.slice(1)}`]" type="checkbox" class="accent-main" />{{ t('admin.removeCurrent') }} {{ t(`admin.${field}`) }}</label></div><MediaInput :field="field" :required="kind === 'hero' && field === 'video' && !editing" @change="files[field] = $event" @invalid="formError = $event" /></template>
           <div class="flex flex-wrap gap-5"><label v-for="key in config.toggles" :key="key" class="flex items-center gap-2 text-sm"><input v-model="form[key]" type="checkbox" class="size-4 accent-main" />{{ t(`admin.${key}`) }}</label></div>
         </fieldset>

@@ -16,7 +16,9 @@
     "work": "Our work",
     "clients": "Companies",
     "studio": "The studio",
-    "services": "What we do"
+    "services": "What we do",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "hero": {
     "eyebrow": "Independent creative & media studio",
