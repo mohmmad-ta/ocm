@@ -1,36 +1,19 @@
 <script setup>
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { usePortfolio, portfolioImage } from '../composables/usePortfolio'
+import { mediaUrl } from '../../axios/axios'
 
 const { locale, t } = useI18n()
 
-const photoColumns = [
-  [
-    { image: 'photo-1490312278390-ab64016e0aa9', position: 'object-center' },
-    { image: 'photo-1515886657613-9f3515b0c78f', position: 'object-[center_30%]' },
-    { image: 'photo-1470770841072-f978cf4d019e', position: 'object-center' },
-  ],
-  [
-    { image: 'photo-1483985988355-763728e1935b', position: 'object-center' },
-    { image: 'photo-1524504388940-b1c1722653e1', position: 'object-center' },
-    { image: 'photo-1485846234645-a62644f84728', position: 'object-center' },
-  ],
-  [
-    { image: 'photo-1500530855697-b586d89ba3ee', position: 'object-center' },
-    { image: 'photo-1534528741775-53994a69daeb', position: 'object-center' },
-    { image: 'photo-1515886657613-9f3515b0c78f', position: 'object-[center_30%]' },
-  ],
-  [
-    { image: 'photo-1516035069371-29a1b244cc32', position: 'object-center' },
-    { image: 'photo-1531058020387-3be344556be6', position: 'object-center' },
-    { image: 'photo-1524250502761-1ac6f2e30d43', position: 'object-center' },
-  ],
-]
-
-const displayColumns = [
-  ...photoColumns,
-  photoColumns[0],
-  photoColumns[2],
-]
+const { hero, projects } = usePortfolio()
+const displayColumns = computed(() => {
+  const images = [hero.value?.image, hero.value?.poster, ...projects.value.map(p => p.image)].filter(Boolean)
+  if (!images.length && !hero.value?.video) return []
+  return Array.from({ length: 6 }, (_, col) => Array.from({ length: 3 }, (_, row) => ({
+    image: images[(col + row) % images.length], position: 'object-center',
+  })))
+})
 
 const animationDelayClasses = [
   '[animation-delay:0s]',
@@ -41,14 +24,14 @@ const animationDelayClasses = [
   '[animation-delay:-20s]',
 ]
 
-const photoUrl = (image) => `https://images.unsplash.com/${image}?auto=format&fit=crop&w=650&q=80`
-const heroVideoUrl = 'https://videos.pexels.com/video-files/8056840/8056840-sd_540_960_25fps.mp4'
+const photoUrl = portfolioImage
+const heroVideoUrl = computed(() => mediaUrl(hero.value?.video))
 
 function setVideoOffset(event, columnIndex, videoIndex) {
   const video = event.currentTarget
   if (!Number.isFinite(video.duration) || video.duration <= 0) return
   video.currentTime = ((columnIndex * 3 + videoIndex) * 1.7) % video.duration
-  video.play().catch(() => {})
+  if (hero.value?.autoplay) video.play().catch(() => {})
 }
 </script>
 
@@ -77,18 +60,21 @@ function setVideoOffset(event, columnIndex, videoIndex) {
                 class="aspect-[9/16] shrink-0 overflow-hidden rounded-[3px] bg-[#090909] shadow-[0_12px_30px_#0006]"
               >
                 <video
+                  v-if="heroVideoUrl"
+                  :key="heroVideoUrl"
                   :src="heroVideoUrl"
-                  :poster="photoUrl(photo.image)"
+                  :poster="photoUrl(hero?.poster || photo.image)"
                   :class="photo.position"
                   class="size-full object-cover brightness-[.85] saturate-[.75]"
-                  autoplay
-                  muted
-                  loop
+                  :autoplay="hero?.autoplay"
+                  :muted="hero?.muted"
+                  :loop="hero?.loop"
                   playsinline
                   preload="metadata"
                   aria-hidden="true"
                   @loadedmetadata="setVideoOffset($event, columnIndex, photoIndex)"
                 ></video>
+                <img v-else :src="photoUrl(photo.image)" alt="" class="size-full object-cover brightness-[.85] saturate-[.75]" />
               </div>
             </div>
           </div>

@@ -6,6 +6,8 @@ import App from './App.vue'
 import router from './router'
 import en from './locales/en.json'
 import ar from './locales/ar.json'
+import adminEn from './locales/admin-en.json'
+import adminAr from './locales/admin-ar.json'
 
 const app = createApp(App)
 const savedLocale = localStorage.getItem('ocm-locale')
@@ -19,7 +21,7 @@ const i18n = createI18n({
   legacy: false,
   locale: initialLocale,
   fallbackLocale: 'en',
-  messages: { en, ar },
+  messages: { en: { ...en, ...adminEn }, ar: { ...ar, ...adminAr } },
 })
 
 app.use(router)

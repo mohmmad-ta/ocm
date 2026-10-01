@@ -1,6 +1,7 @@
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { portfolioImage } from '../composables/usePortfolio'
 
 const { locale, t } = useI18n()
 
@@ -24,9 +25,7 @@ const capabilities = computed(() => [
   { number: '03', title: t('capabilities.screens.title'), copy: t('capabilities.screens.copy') },
 ])
 
-function imageUrl(path, width = 1000) {
-  return `https://images.unsplash.com/${path}?auto=format&fit=crop&w=${width}&q=84`
-}
+const imageUrl = portfolioImage
 
 function cardPosition(index, count) {
   if (count > 3) return 'sm:[transform:none]'
@@ -63,7 +62,7 @@ watch(activeFilter, async () => {
     <div class="relative mx-auto max-w-6xl px-[5.5%]">
       <div class="mx-auto max-w-3xl text-center">
         <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-main">{{ t('work.eyebrow') }}</p>
-        <h2 class="mt-5 text-[clamp(42px,6.7vw,88px)] font-semibold leading-[0.92] tracking-[-0.065em] text-cream">
+        <h2 class="mt-5 text-[clamp(42px,6.7vw,88px)] font-semibold leading-[1.0] tracking-[-0.060em] text-cream">
           {{ t('work.headline1') }}<br />
           <span class="font-serif font-normal italic text-main">{{ t('work.headline2') }}</span>
         </h2>
@@ -78,26 +77,23 @@ watch(activeFilter, async () => {
       <div class="mt-11 flex flex-wrap items-center justify-center gap-2" :aria-label="t('work.filterLabel')">
         <button
           v-for="filter in filters"
-          :key="filter"
+          :key="filter.id"
           type="button"
           class="rounded-full border px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.14em] transition duration-300"
-          :class="activeFilter === filter ? 'border-main bg-main text-canvas' : 'border-white/10 bg-white/[0.025] text-muted hover:border-white/30 hover:text-cream'"
-          :aria-pressed="activeFilter === filter"
-          @click="activeFilter = filter"
+          :class="activeFilter === filter.id ? 'border-main bg-main text-canvas' : 'border-white/10 bg-white/[0.025] text-muted hover:border-white/30 hover:text-cream'"
+          :aria-pressed="activeFilter === filter.id"
+          @click="activeFilter = filter.id"
         >
-          {{ t(`filters.${filter}`) }}
+          {{ filter.name }}
         </button>
       </div>
     </div>
 
+    <p v-if="!visibleProjects.length" class="relative mt-12 text-center text-muted">{{ t('data.noProjects') }}</p>
     <div class="relative mt-14 sm:mt-20">
       <div class="pointer-events-none absolute left-1/2 top-1/2 h-52 w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-main/20 blur-[90px]"></div>
       <div class="pointer-events-none absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-main/70 to-transparent shadow-[0_0_40px_10px_rgba(244,122,75,0.22)]"></div>
 
-      <div v-if="visibleProjects.length > 3" class="relative z-30 mx-auto flex max-w-6xl justify-end gap-2 px-[5.5%]">
-        <button type="button" class="grid size-11 place-items-center rounded-full border border-white/15 bg-black/30 text-lg text-cream backdrop-blur-md transition hover:border-main hover:bg-main hover:text-canvas" :aria-label="t('work.previous')" @click="scrollProjects(-1)">{{ locale === 'ar' ? '→' : '←' }}</button>
-        <button type="button" class="grid size-11 place-items-center rounded-full border border-white/15 bg-black/30 text-lg text-cream backdrop-blur-md transition hover:border-main hover:bg-main hover:text-canvas" :aria-label="t('work.next')" @click="scrollProjects(1)">{{ locale === 'ar' ? '←' : '→' }}</button>
-      </div>
 
       <div
         ref="carousel"
@@ -113,7 +109,7 @@ watch(activeFilter, async () => {
           <button type="button" class="absolute inset-0 block h-full w-full text-start" :aria-label="t('work.viewProject', { title: project.title })" @click="emit('select', project)">
             <img :src="imageUrl(project.image)" :alt="`${project.client} — ${project.title}`" class="h-full w-full object-cover transition duration-700 group-hover:scale-105" :class="project.imageClass" loading="lazy" />
             <span class="absolute inset-0 bg-gradient-to-t from-black via-black/5 to-black/10"></span>
-            <span class="absolute left-5 top-5 rounded-full border border-white/20 bg-black/25 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.15em] text-white backdrop-blur-md">{{ t(`filters.${project.categoryId}`) }}</span>
+            <span class="absolute left-5 top-5 rounded-full border border-white/20 bg-black/25 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.15em] text-white backdrop-blur-md">{{ project.category }}</span>
             <span class="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-6">
               <span>
                 <span class="block text-[10px] font-semibold uppercase tracking-[0.18em] text-main">{{ project.client }}</span>
@@ -123,6 +119,10 @@ watch(activeFilter, async () => {
             </span>
           </button>
         </article>
+      </div>
+      <div v-if="visibleProjects.length > 3" class="relative z-30 mx-auto flex w-full justify-center gap-6">
+        <button type="button" class="grid size-11 place-items-center rounded-full border border-white/15 bg-black/30 text-lg text-cream backdrop-blur-md transition hover:border-main hover:bg-main hover:text-canvas" :aria-label="t('work.previous')" @click="scrollProjects(-1)">{{ locale === 'ar' ? '→' : '←' }}</button>
+        <button type="button" class="grid size-11 place-items-center rounded-full border border-white/15 bg-black/30 text-lg text-cream backdrop-blur-md transition hover:border-main hover:bg-main hover:text-canvas" :aria-label="t('work.next')" @click="scrollProjects(1)">{{ locale === 'ar' ? '←' : '→' }}</button>
       </div>
     </div>
 

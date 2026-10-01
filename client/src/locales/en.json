@@ -7,12 +7,14 @@
     "close": "Close −",
     "closeDialog": "Close dialog",
     "backToTop": "Back to top ↑",
+    "backHome": "Back to home",
     "language": "العربية"
   },
   "nav": {
     "home": "OCM home",
     "main": "Main navigation",
     "work": "Our work",
+    "clients": "Companies",
     "studio": "The studio",
     "services": "What we do"
   },
@@ -85,10 +87,52 @@
       "type": "Identity concept",
       "description": "A quieter kind of statement. A brand identity concept for considered spaces, built around natural textures, warm neutrals, and the beauty of everyday rituals.",
       "services": "Brand strategy · Visual identity · Art direction"
+    },
+    "kinetic": {
+      "title": "Future in motion.",
+      "type": "Brand film",
+      "description": "A cinematic launch story built around movement, precision and the optimistic energy of what comes next.",
+      "services": "Creative direction · Brand film · Motion system"
+    },
+    "aurora": {
+      "title": "A language of light.",
+      "type": "Photography campaign",
+      "description": "A luminous editorial world where color, texture and portraiture turn everyday beauty into a distinctive visual signature.",
+      "services": "Art direction · Photography · Campaign design"
+    },
+    "harbor": {
+      "title": "Find your way.",
+      "type": "Brand identity",
+      "description": "A calm, confident identity for modern travel, designed to make every destination feel easier to discover.",
+      "services": "Brand strategy · Visual identity · Digital direction"
     }
   },
+  "clients": {
+    "aria": "Companies we work with",
+    "eyebrow": "02 / In good company",
+    "headline1": "Built together.",
+    "headline2": "Remembered everywhere.",
+    "description": "We work with ambitious teams who care about the idea, the craft and what their audience feels next.",
+    "projectCount": "{count} project | {count} projects"
+  },
+  "companies": {
+    "industries": {
+      "outdoor": "Outdoor & lifestyle",
+      "fashion": "Fashion & culture",
+      "hospitality": "Hospitality & spaces",
+      "technology": "Technology & mobility",
+      "beauty": "Beauty & culture",
+      "travel": "Travel & hospitality"
+    },
+    "nomad": { "description": "NOMAD creates equipment and experiences for people who choose the open road. We shaped a cinematic world that makes exploration feel immediate and personal." },
+    "form": { "description": "FORM is a contemporary fashion platform built around movement and individuality. Our work gives its editorial voice a sharper, more expressive rhythm." },
+    "earthen": { "description": "EARTHEN creates considered spaces from honest materials. We built a warm identity that turns quiet details into a memorable brand language." },
+    "kinetic": { "description": "KINETIC develops technology that moves with people. We translated speed, precision and optimism into a flexible motion-led brand world." },
+    "aurora": { "description": "AURORA sees beauty as an expression of character. We created a luminous campaign system shaped by portraiture, color and light." },
+    "harbor": { "description": "HARBOR helps curious travelers find places worth remembering. We designed a calm identity and a clear digital path from inspiration to arrival." }
+  },
   "about": {
-    "eyebrow": "02 / The studio",
+    "eyebrow": "03 / The studio",
     "headline1": "Small ego.",
     "headline2": "Big ideas.",
     "headline3": "Real impact.",
@@ -97,7 +141,7 @@
     "link": "Meet your next creative partner"
   },
   "services": {
-    "eyebrow": "03 / What we do",
+    "eyebrow": "04 / What we do",
     "headline1": "From the idea.",
     "headline2": "To the",
     "headline3": "impact.",
@@ -157,6 +201,33 @@
     "email": "Email",
     "service": "Service",
     "idea": "Project idea"
+  },
+  "companyPage": {
+    "back": "All companies",
+    "eyebrow": "Company profile",
+    "industry": "Industry",
+    "projects": "Projects",
+    "partnership": "Partnership",
+    "ongoing": "Ongoing",
+    "workEyebrow": "Selected collaboration",
+    "workTitle": "Work made together.",
+    "cta": "Start the next project with us",
+    "notFound": "Company not found"
+  },
+  "projectPage": {
+    "work": "Our work",
+    "eyebrow": "Case study",
+    "client": "Client",
+    "year": "Year",
+    "scope": "Scope",
+    "brief": "The brief",
+    "briefCopy": "Create a distinctive story that feels true to the brand and clear enough to connect in a single glance.",
+    "approach": "The approach",
+    "approachCopy": "Strategy, direction and production moved as one system, giving every frame the same confident point of view.",
+    "outcome": "The outcome",
+    "outcomeCopy": "A flexible visual world made to hold attention across campaigns, digital products and social channels.",
+    "next": "Next project",
+    "notFound": "Project not found"
   },
   "footer": { "tagline": "Independent minds. Extraordinary stories." }
 }
